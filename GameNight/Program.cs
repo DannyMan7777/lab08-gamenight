@@ -40,7 +40,42 @@ for(int i = 0; i < players.Length; i++)
 int currentLeader = LeaderIndex(points);
 int totalPoints = TotalPoints(points);
 System.Console.WriteLine($"Leader: {players[currentLeader]} with {points[currentLeader]}");
-System.Console.WriteLine($"Season total: {totalPoints}");
+System.Console.WriteLine($"Season total: {totalPoints}\n");
+
+//Part 2: Game Night
+
+int mostPointsTonight = 0;
+int winnerTonight = 0;
+
+// Since this loop needs to update every index in points[] and also on relies[], a for() with an incrementer works best.
+for(int i = 0; i < players.Length; i++)
+{
+    System.Console.Write($"Points tonight for {players[i]}: ");
+    int pointsTonight = Convert.ToInt32(Console.ReadLine());
+    // A while checks to see if the inital input is valid. If not, it asks for another input; otherwise, it skips itself and the
+    // for() carries on.
+    while(pointsTonight < 0 || pointsTonight > 20)
+    {
+        System.Console.WriteLine("Points must be from 0 to 20.");
+        System.Console.Write($"Points tonight for {players[i]}: ");
+        pointsTonight = Convert.ToInt32(Console.ReadLine());
+    }
+
+    int pointsSeason = Convert.ToInt32(points[i]) + pointsTonight;
+    points[i] = pointsSeason.ToString();
+
+    if(pointsTonight > mostPointsTonight)
+    {
+        mostPointsTonight = pointsTonight;
+        winnerTonight = i;
+    }
+}
+
+System.Console.WriteLine($"Tonight's winner: {players[winnerTonight]} with {mostPointsTonight}\n");
+
+File.WriteAllLines(POINTS_FILE, points);
+
+System.Console.WriteLine($"Saved {POINTS_FILE}.\n");
 
 //Methods
 
