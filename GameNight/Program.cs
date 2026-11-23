@@ -141,6 +141,7 @@ static int TotalPoints(string[] points)
     return pointTotal;
 }
 
+// History Entry records for each game night which person won and with how many points.
 static string HistoryEntry(int night, string winner, int points)
 {
     string historyEntry = $"Night {night}: {winner} won with {points} points.";
