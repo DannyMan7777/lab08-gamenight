@@ -21,6 +21,28 @@ string projectFolder = Path.GetFullPath(
 Path.Combine(AppContext.BaseDirectory, "..", "..", ".."));
 Directory.SetCurrentDirectory(projectFolder);
 
+//Part 3a: The History (Read)
+string[] entries = File.ReadAllLines(HISTORY_FILE);
+int lastNight = entries.Length;
+int tonight = entries.Length + 1;
+
+System.Console.WriteLine("=== GAME NIGHT LEADERBOARD ===");
+
+if(entries.Length == 0)
+{
+    System.Console.WriteLine("No nights played yet.");
+}
+else
+{
+    System.Console.WriteLine($"Nights played: {lastNight}");
+    // We iterate once through every entry in the history file: foreach() will suffice.
+    foreach(string e in entries)
+    {
+        System.Console.WriteLine(e);
+    }
+}
+System.Console.WriteLine($"Tonight is Night {tonight}.\n");
+
 //Part 1: The Standings
 
 // The .txts act like columns of a tablebase. The lines align along their rows, and a for() uses one universal, incrementing index
@@ -54,7 +76,7 @@ for(int i = 0; i < players.Length; i++)
     int pointsTonight = Convert.ToInt32(Console.ReadLine());
     // A while checks to see if the inital input is valid. If not, it asks for another input; otherwise, it skips itself and the
     // for() carries on.
-    while(pointsTonight < 0 || pointsTonight > 20)
+    while(pointsTonight < 0 || pointsTonight > MAX_POINTS)
     {
         System.Console.WriteLine("Points must be from 0 to 20.");
         System.Console.Write($"Points tonight for {players[i]}: ");
@@ -76,6 +98,12 @@ System.Console.WriteLine($"Tonight's winner: {players[winnerTonight]} with {most
 File.WriteAllLines(POINTS_FILE, points);
 
 System.Console.WriteLine($"Saved {POINTS_FILE}.\n");
+
+//Part 3b: The History (Write)
+
+string[] entry = {HistoryEntry(tonight, players[winnerTonight], mostPointsTonight)};
+File.AppendAllLines(HISTORY_FILE, entry);
+System.Console.WriteLine($"Added to {HISTORY_FILE}: {entry[entry.Length - 1]}");
 
 //Methods
 
@@ -115,6 +143,6 @@ static int TotalPoints(string[] points)
 
 static string HistoryEntry(int night, string winner, int points)
 {
-    
-    return "";
+    string historyEntry = $"Night {night}: {winner} won with {points} points.";
+    return historyEntry;
 }
